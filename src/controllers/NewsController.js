@@ -2,17 +2,14 @@ const { News } = require("../models");
 const schedule = require("node-schedule");
 const socketManager = require("../utils/socket");
 
-
 exports.create = async (req, res) => {
-  
   try {
     const files = req.files || [];
     const { title, description, quote, code, publishAt } = req.body;
-    console.log('publishAt: ', publishAt);
     const publishDate = publishAt ? new Date(publishAt) : null;
     const isPublished = publishDate && publishDate <= new Date();
 
-    const fileNames = files.map(file => file.filename);
+    const fileNames = files.map((file) => file.filename);
 
     const newPost = await News.create({
       title,
@@ -40,24 +37,26 @@ exports.create = async (req, res) => {
 
     return res.send(newPost);
   } catch (e) {
-    console.log('e: ', e);
+    console.log("e: ", e);
     return res.status(400).send({ message: "Something is wrong" });
   }
 };
 
-
 exports.delete = async (req, res) => {
   try {
-    const { deletedCount } = await News.deleteOne({ _id: req.params.id });
-    if (!deletedCount) {
+    const post = await News.findById(req.params.id);
+    if (!post) {
       return res.status(404).send({ message: "Post is not found" });
     }
 
+    await News.deleteOne({ _id: req.params.id });
+
     const io = socketManager.getIO();
-    io.emit("newsDeleted", req.params.id);
+    io.emit("newsDeleted", { id: req.params.id, title: post.title });
 
     return res.send({ message: "Post successfully deleted" });
-  } catch (_) {
+  } catch (e) {
+    console.log("e: ", e);
     return res.status(400).send({ message: "Something is wrong" });
   }
 };

@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
@@ -23,8 +24,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.static('public/uploads'));
+app.use(express.static(path.join(__dirname, "public/uploads")));
+// app.use(bodyParser.json({ limit: "50mb" })); // Устанавливаем лимит для JSON данных
+// app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); 
 app.use(require("./routes"));
 
 mongoose

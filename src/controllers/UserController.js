@@ -24,7 +24,6 @@ exports.registration = async (req, res) => {
   try {
     const password = bcrypt.hashSync(req.body.password, +process.env.SALT);
     const newUser = await User.create({ ...req.body, password });
-
     const accessToken = generateToken({ _id: newUser._id }, "30d");
     return res.send({ accessToken });
   } catch (_) {
