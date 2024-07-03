@@ -1,6 +1,9 @@
 # News Application Project
 
 API for creating, managing, and publishing news articles with user registration and authorization, along with real-time interaction.
+
+### API Access
+
 API is available at: [Backend](https://news-application-backend-hthm.onrender.com)
 
 ### Features
@@ -21,5 +24,5 @@ API is available at: [Backend](https://news-application-backend-hthm.onrender.co
 - **Multer**
 - **Socket.IO**
 
-### API Access
+
 
