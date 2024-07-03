@@ -17,8 +17,8 @@ const registrationValid = (req, res, next) => {
         return res.status(422).send({message: "All fields are required"});
 
     // Validate email format
-    if(!validEmail(email)) 
-        errors.push('Invalid email');
+    // if(!validEmail(email)) 
+    //     errors.push('Invalid email');
 
     // If there are validation errors, send response with errors
     if(errors.length) 

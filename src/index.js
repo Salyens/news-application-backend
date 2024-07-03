@@ -76,7 +76,6 @@ io.of('/news').on("connection", (socket) => {
 
   // Handle incoming messages
   socket.on("message", (data) => {
-    console.log(data);
     io.of('/news').emit("message", `${socket.id.substring(0, 5)}: ${data}`);
   });
 
