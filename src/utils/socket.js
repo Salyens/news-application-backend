@@ -1,32 +1,43 @@
 const socketIO = require('socket.io');
 
 /**
- * Creates a socket manager to manage the Socket.io instance.
- * 
- * @returns {Object} An object with methods to initialize and retrieve the Socket.io instance.
+ * Creates and initializes the socket manager.
+ * @returns {Object} Socket manager with init and getIO methods.
  */
 function createSocketManager() {
   let io;
 
   return {
-    /**
-     * Initializes the Socket.io instance with the provided HTTP server and options.
-     * 
-     * @param {Object} httpServer - The HTTP server to attach Socket.io to.
-     * @param {Object} options - Configuration options for Socket.io.
-     * @returns {Object} The initialized Socket.io instance.
-     */
     init: (httpServer, options) => {
       io = socketIO(httpServer, options);
+      
+
+      const newsNamespace = io.of('/news');
+
+      newsNamespace.on('connection', (socket) => {
+        console.log(`User connected to news namespace: ${socket.id}`);
+
+        socket.on('newsCreated', (news) => {
+          newsNamespace.emit('newsCreated', news);
+        });
+
+
+        socket.on('newsUpdated', (news) => {
+          newsNamespace.emit('newsUpdated', news);
+        });
+
+
+        socket.on('newsDeleted', ({ id, title }) => {
+          newsNamespace.emit('newsDeleted', { id, title });
+        });
+
+        socket.on('disconnect', () => {
+          console.log(`User disconnected from news namespace: ${socket.id}`);
+        });
+      });
+
       return io;
     },
-
-    /**
-     * Retrieves the initialized Socket.io instance.
-     * 
-     * @throws {Error} If Socket.io is not initialized.
-     * @returns {Object} The initialized Socket.io instance.
-     */
     getIO: () => {
       if (!io) {
         throw new Error("Socket.io not initialized!");
