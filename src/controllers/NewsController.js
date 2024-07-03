@@ -38,6 +38,7 @@ exports.create = async (req, res) => {
 
     // Schedule the post to be published at the specified date if it's not already published
     if (publishDate && !isPublished) {
+      console.log('if');
       schedule.scheduleJob(publishDate, async () => {
         const post = await News.findById(newPost._id);
         if (post && !post.isPublished) {
@@ -48,6 +49,7 @@ exports.create = async (req, res) => {
       });
     } else {
       // Emit an event to notify clients that a new post has been created
+      console.log('else');
       io.emit("newsCreated", newPost);
     }
 
