@@ -1,5 +1,3 @@
-const { validEmail } = require('../../utils/validations');
-
 /**
  * Middleware to validate registration data.
  * @param {Object} req - The request object.
@@ -16,9 +14,7 @@ const registrationValid = (req, res, next) => {
     if(!email || !password) 
         return res.status(422).send({message: "All fields are required"});
 
-    // Validate email format
-    if(!validEmail(email)) 
-        errors.push('Invalid email');
+
 
     // If there are validation errors, send response with errors
     if(errors.length) 
