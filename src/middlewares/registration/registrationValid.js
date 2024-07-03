@@ -11,6 +11,7 @@ const registrationValid = (req, res, next) => {
     const errors = [];
     const { email, password } = req.body;
 
+
     // Check if email and password are provided
     if(!email || !password) 
         return res.status(422).send({message: "All fields are required"});

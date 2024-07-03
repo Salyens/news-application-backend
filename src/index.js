@@ -1,21 +1,14 @@
-/**
- * @fileoverview Entry point of the server application.
- * Configures environment variables, sets up Express server, connects to MongoDB, 
- * initializes Socket.IO, and defines the server routes.
- */
-
-const dotenv = require("dotenv");
-dotenv.config(); // Load environment variables from .env file
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 const http = require("http");
+const dotenv = require("dotenv");
 const socketManager = require("./utils/socket");
 const { FILES_FOLDER } = require("./common/constants");
 
-// Initialize Express app
+dotenv.config(); // Load environment variables from .env file
+
 const app = express();
 
 /**
@@ -50,14 +43,12 @@ const corsOptions = {
   optionsSuccessStatus: 200, // For legacy browser support
 };
 
-// Apply CORS middleware with specified options
+// Apply middleware
 app.use(cors(corsOptions));
-
-// Serve static files from the specified folder
-app.use(express.static(path.join(__dirname, FILES_FOLDER)));
-
-// Use routes defined in the routes directory
-app.use(require("./routes"));
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(express.static(path.join(__dirname, FILES_FOLDER))); // Serve static files
+app.use(require("./routes")); // Use routes defined in the routes directory
 
 // Connect to MongoDB
 mongoose
