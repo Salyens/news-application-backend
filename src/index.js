@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
 const http = require("http");
 const dotenv = require("dotenv");
 const socketManager = require("./utils/socket");
@@ -48,7 +47,7 @@ const corsOptions = {
 // Apply middleware
 app.use(cors(corsOptions));
 app.use(express.json()); // Parse JSON bodies
-app.use(express.static(path.join(__dirname, FILES_FOLDER))); // Serve static files
+app.use(express.static(FILES_FOLDER)); // Serve static files
 app.use(require("./routes")); // Use routes defined in the routes directory
 
 // Connect to MongoDB
